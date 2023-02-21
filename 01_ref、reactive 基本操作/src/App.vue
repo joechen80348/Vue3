@@ -4,7 +4,10 @@
   <hr>
   <h3>Name : {{ person.name }}</h3>
   <h3>Hobby : {{ person.hobby }}</h3>
-  <button @click="changeInfo">修改Name及Hobby</button>
+  <h3 v-show="person.sex">Sex : {{ person.sex }}</h3>
+  <button @click="addInfo">新增性別</button>
+  <button @click="updateInfo">修改Name及Hobby</button>
+  <button @click="deleteInfo">刪除性別</button>
 </template>
 
 <script>
@@ -23,12 +26,22 @@
         hobby: ["打電動", "睡覺"],
       });
 
-      const changeInfo = () => {
+      // 新增
+      const addInfo = () => {
+        person.sex = "男";
+      };
+
+      // 修改
+      const updateInfo = () => {
         person.name = "Joe";
         person.hobby[1] = "追劇";
       };
 
-      return { num, add, person, changeInfo };
+      const deleteInfo = () => {
+        delete person.sex;
+      };
+
+      return { num, add, person, addInfo, updateInfo, deleteInfo };
     },
   };
 </script>
