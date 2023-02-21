@@ -1,13 +1,10 @@
 <template>
   <h2>Name is: {{ name }}</h2>
   <h2>Age is: {{ age }}</h2>
-
   <!-- <h2>Salary is: {{ salary }}K</h2> -->
   <h2>Salary is: {{ job.j1.salary }}K</h2>
-
   <button @click="name+='~'">修改姓名</button>
   <button @click="age++">增長年齡</button>
-
   <!-- <button @click="salary++">加薪</button> -->
   <button @click="job.j1.salary++">加薪</button>
 
