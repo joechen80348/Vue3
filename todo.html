@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Todo List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <style>
+        body {
+            background-color: #f6f6f6;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            color: #333;
+            margin: 0;
+        }
+
+        .header input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 70%;
+            margin-right: 10px;
+        }
+
+        .header button {
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .todo-item .text {
+            font-size: 20px;
+            color: #333;
+            margin: 0;
+            flex: 1;
+        }
+
+        .todo-item .buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .todo-item .buttons button {
+            padding: 10px;
+            margin-left: 5px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .todo-item .buttons .edit {
+            color: #2ecc71;
+        }
+
+        .todo-item .buttons .delete {
+            color: #e74c3c;
+        }
+
+        .todo-item.completed .text {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .todo-item .check-box {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .todo-item .check-box input[type="checkbox"] {
+            width: 25px;
+            height: 25px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .todo-item .check-box .checkmark {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .todo-item .check-box .checkmark i {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        /* Add styles for the completed checkbox */
+        .todo-item .check-box .checkmark.checked {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .todo-item .check-box .checkmark.checked i {
+            display: block;
+        }
+
+        /* Add styles for the edit form */
+        .edit-form {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .edit-form input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .edit-form button {
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>My Todo List</h1>
+            <form id="add-form">
+                <input type="text" placeholder="Add new task" />
+                <button type="submit"><i class="fas fa-plus"></i></button>
+            </form>
+        </div>
+        <ul id="todo-list">
+            <li class="todo-item">
+                <div class="check-box">
+                    <div class="checkmark"></div>
+                </div>
+                <p class="text">Buy groceries</p>
+                <div class="buttons"><button class="edit"><i class="fas fa-edit"></i></button><button class="delete"><i
+                            class="fas fa-trash"></i></button></div>
+            </li>
+            <li class="todo-item">
+                <div class="check-box">
+                    <div class="checkmark"></div>
+                </div>
+                <p class="text">Do laundry</p>
+                <div class="buttons"><button class="edit"><i class="fas fa-edit"></i></button><button class="delete"><i
+                            class="fas fa-trash"></i></button></div>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        const todoList = document.getElementById("todo-list");
+        const addForm = document.getElementById("add-form");
+        const todoItems = [];
+        function renderTodoList() {
+            todoList.innerHTML = "";
+
+            todoItems.forEach((item, index) => {
+                const li = document.createElement("li");
+                li.classList.add("todo-item");
+                if (item.completed) {
+                    li.classList.add("completed");
+                }
+
+                const checkBox = document.createElement("div");
+                checkBox.classList.add("check-box");
+                const checkmark = document.createElement("div");
+                checkmark.classList.add("checkmark");
+                checkmark.addEventListener("click", () => {
+                    item.completed = !item.completed;
+                    renderTodoList();
+                });
+                if (item.completed) {
+                    checkmark.classList.add("checked");
+                    checkmark.innerHTML = '<i class="fas fa-check"></i>';
+                }
+                checkBox.appendChild(checkmark);
+
+                const text = document.createElement("p");
+                text.classList.add("text");
+                text.innerText = item.text;
+
+                const buttons = document.createElement("div");
+                buttons.classList.add("buttons");
+                const editButton = document.createElement("button");
+                editButton.classList.add("edit");
+                editButton.innerHTML = '<i class="fas fa-edit"></i>';
+                editButton.addEventListener("click", () => {
+                    editForm(item, index);
+                });
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete");
+                deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+                deleteButton.addEventListener("click", () => {
+                    deleteItem(index);
+                });
+                buttons.appendChild(editButton);
+                buttons.appendChild(deleteButton);
+
+                li.appendChild(checkBox);
+                li.appendChild(text);
+                li.appendChild(buttons);
+
+                todoList.appendChild(li);
+            });
+        }
+
+        function addItem(text) {
+            const item = {
+                text,
+                completed: false,
+            };
+            todoItems.push(item);
+            renderTodoList();
+        }
+
+        function deleteItem(index) {
+            todoItems.splice(index, 1);
+            renderTodoList();
+        }
+
+        function editForm(item, index) {
+            const li = document.createElement("li");
+            li.classList.add("todo-item");
+            li.classList.add("edit-form");
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.value = item.text;
+
+            const saveButton = document.createElement("button");
+            saveButton.innerHTML = '<i class="fas fa-save"></i>';
+            saveButton.addEventListener("click", (event) => {
+                event.preventDefault();
+                const newText = input.value;
+                todoItems[index].text = newText;
+                renderTodoList();
+            });
+
+            const cancelButton = document.createElement("button");
+            cancelButton.innerHTML = '<i class="fas fa-times"></i>';
+            cancelButton.addEventListener("click", () => {
+                renderTodoList();
+            });
+
+            li.appendChild(input);
+            li.appendChild(saveButton);
+            li.appendChild(cancelButton);
+
+            todoList.replaceChild(li, todoList.childNodes[index]);
+        }
+
+        addForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const input = addForm.querySelector("input[type='text']");
+            const text = input.value.trim();
+            if (text) {
+                addItem(text);
+                input.value = "";
+            }
+        });
+
+        addItem("Buy groceries");
+        addItem("Do laundry");
+        addItem("Finish project");
+
+        renderTodoList();
+    </script>
+</body>
+
+</html>
